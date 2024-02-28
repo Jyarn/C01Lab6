@@ -1,0 +1,13 @@
+FROM node:20.0.0-alpine AS frontend
+WORKDIR /app/quirknotes/frontend
+COPY quirknotes/frontend/package*.json ./
+RUN npm install
+COPY quirknotes/frontend ./
+RUN npm run build
+
+
+FROM nginx:alpine AS webserver
+WORKDIR /usr/share/nginx/html
+COPY --from=frontend /app/quirknotes/frontend/build ./
+EXPOSE 3000
+CMD ["nginx", "-g", "daemon off;"]
