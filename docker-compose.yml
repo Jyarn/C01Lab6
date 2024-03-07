@@ -1,0 +1,22 @@
+services:
+  backend:
+    image: ${{ secrets.DOCKERHUB_USERNAME }}/quirknotes_backend:latest
+    ports:
+     - 4000:4000
+    environment:
+      ENV: "Docker"
+    depends_on:
+     - mongodb
+
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile_frontend
+      target: webserver
+    ports:
+      - 3000:80
+
+  mongodb:
+    image: mongo:latest
+    ports:
+     - 27017:27017
